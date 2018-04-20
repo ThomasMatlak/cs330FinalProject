@@ -66,10 +66,11 @@ def dijkstra(src, vertices, edges):
 def main():
     vertices, edges = parse_graph_file("default_graph.txt")
 
-    dist, prev = dijkstra(0, vertices, edges)
-
-    print(dist)
-    print(prev)
+    for v in vertices:
+        print("Source:", v)
+        dist, prev = dijkstra(v, vertices, edges)
+        print(dist)
+        print(prev)
 
 
 if __name__ == '__main__':
