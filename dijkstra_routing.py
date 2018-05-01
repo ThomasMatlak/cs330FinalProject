@@ -80,7 +80,11 @@ def print_routing_table(source, routing_table):
 
 
 def main():
-    vertices, edges = parse_graph_file("default_graph.txt")
+    input_file = "default_graph.txt"
+    if len(sys.argv) > 1:
+        input_file = sys.argv[1]
+
+    vertices, edges = parse_graph_file(input_file)
 
     for v in vertices:
         dist, prev = dijkstra(v, vertices, edges)
