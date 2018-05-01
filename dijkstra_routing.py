@@ -2,19 +2,17 @@
 
 '''
 Network routing with Dijkstra's algorithm
+
+The provided graph is assumed to be connected
 '''
 
 
 import math
-
-# TODO be able to run for one node
-# TODO be able to run for all nodes
-
 import sys
 import queue
 
 def parse_graph_file(filename):
-    ''' 
+    '''
     The first line of an input file is the number of vertices, v
     The second line is the number of edges, e
     The next e lines contain pairs of adjacent vertices
@@ -34,6 +32,11 @@ def parse_graph_file(filename):
 
 
 def dijkstra(src, vertices, edges):
+    '''
+    Perform Dijkstra's shortest path algorithm on the graph consisting of vertices and edges
+    Uses src as the starting point
+    '''
+
     dist = [(v, math.inf) for v in vertices]
     prev = [None for _ in vertices]
 
@@ -63,14 +66,53 @@ def dijkstra(src, vertices, edges):
     return dist, prev
 
 
+def print_routing_table(source, routing_table):
+    '''
+    Print the routing table for node source
+    '''
+
+    print("Routing Table for Node {}\n------------------------".format(source))
+    print("DEST | LINK\n-----------")
+    for key in routing_table.keys():
+        for n in routing_table[key]:
+            print("{}    |({},{})".format(n, source, key))
+    print("\n")
+
+
 def main():
     vertices, edges = parse_graph_file("default_graph.txt")
 
     for v in vertices:
-        print("Source:", v)
         dist, prev = dijkstra(v, vertices, edges)
-        print(dist)
-        print(prev)
+
+        # build routing table
+        routing = {}
+
+        Q = queue.Queue()
+
+        for i in vertices:
+            Q.put(i)
+
+        while not Q.empty():
+            n = Q.get()
+
+            if n == v:
+                continue  # we don't need to put the current node in the routing table
+            elif prev[n] == v:
+                routing[n] = [n]
+            elif prev[n] in routing.keys():
+                routing[prev[n]].append(n)
+            else:
+                found = False
+                for key in routing.keys():
+                    if prev[n] in routing[key]:
+                        found = True
+                        routing[key].append(n)
+                        break
+                if not found:
+                    Q.put(n)  # keep trying until n's prev is in the routing table
+
+        print_routing_table(v, routing)
 
 
 if __name__ == '__main__':
