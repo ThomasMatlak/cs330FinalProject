@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 '''
+Thomas Matlak and Thanh Nguyen
 Network routing with Dijkstra's algorithm
 
 The provided graph is assumed to be connected
@@ -80,6 +81,11 @@ def print_routing_table(source, routing_table):
 
 
 def main():
+    """
+    Reading the graph from txt file
+    Perform djikstra algorithm with assigned vertex
+    :return: print out the routing table for the network
+    """
     input_file = "default_graph.txt"
     if len(sys.argv) > 1:
         input_file = sys.argv[1]
